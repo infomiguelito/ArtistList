@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -42,26 +45,67 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-                    val artist = Artist(
+                    val leonardo = Artist(
                         art = R.drawable.ic_mona_lisa,
                         image = R.drawable.ic_leonardo_da_vinci,
                         name = "Leonardo da Vinci",
                         lastsenonline = " 3 minutes ago"
                     )
 
-                    ArtistCard(artist)
+                    val picasso = Artist(
+                        art = R.drawable.ic_beijo,
+                        image = R.drawable.ic_pablo_picasso,
+                        name = "Pablo Picasso",
+                        lastsenonline = " 7 minutes ago"
+                    )
+
+                    val salvador = Artist(
+                        art = R.drawable.ic_persistence_of_memory,
+                        image = R.drawable.ic_salvador_dali,
+                        name = "Salvador Dali",
+                        lastsenonline = " 6 minutes ago"
+                    )
+
+                    val Gogh = Artist(
+                        art = R.drawable.ic_starry_night,
+                        image = R.drawable.ic_vincent_van_gogh,
+                        name = "Vicent Van Gogh",
+                        lastsenonline = " 20 minutes ago"
+                    )
+
+                    val artists = listOf(Gogh, picasso, salvador, leonardo)
+
+                    LazyColumn {
+                        items(artists) { artist ->
+                            ArtistCard(
+                                artist = artist,
+                                onClick = {
+                                    println("miguel teste" + artist.name)
+                                }
+                            )
+
+                        }
+
+                    }
                 }
+
             }
         }
     }
 }
 
 
+
 @Composable
-fun ArtistCard(artist: Artist) {
-    Column (
-        modifier = Modifier.padding(8.dp)
-    ){
+fun ArtistCard(
+    artist: Artist,
+    onClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .padding(8.dp)
+            .clickable(onClick = onClick)
+    ) {
         Row {
             Image(
                 painter = painterResource(id = artist.image),
@@ -85,13 +129,14 @@ fun ArtistCard(artist: Artist) {
             }
 
         }
-        Card (
+        Card(
             modifier = Modifier
                 .padding(8.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
         ) {
             Image(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .height(200.dp),
                 contentScale = ContentScale.Crop,
                 painter = painterResource(id = artist.art),
@@ -101,25 +146,30 @@ fun ArtistCard(artist: Artist) {
         }
     }
 }
+
 data class Artist(
     val name: String,
     val lastsenonline: String,
-    @DrawableRes val image : Int,
-    @DrawableRes val art : Int
+    @DrawableRes val image: Int,
+    @DrawableRes val art: Int
 )
 
 
 @Preview(showBackground = true)
 @Composable
-fun ArtistCardPreview (){
+fun ArtistCardPreview() {
     ComposeInitTheme {
         val artist = Artist(
             name = "Leonardo da Vinci",
             lastsenonline = " 3 minutes ago",
             image = R.drawable.ic_leonardo_da_vinci,
             art = R.drawable.ic_mona_lisa,
-            )
-        ArtistCard(artist)
+        )
+        ArtistCard(artist = artist,
+            onClick = {
+
+            }
+        )
     }
 }
 
